@@ -1,4 +1,3 @@
-// --- main.cpp ---
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -134,9 +133,9 @@ void playGradeMachine(double& gpa) {
     }
 }
 
-void playRoulette(double& balance) {
+void playGradeWheel(double& balance) {
     double choice, bet;
-    cout << "\n[Roulette] Bet on (0=Red, 1=Black): ";
+    cout << "\n[Grade Wheel] Bet on (0=Red, 1=Black): ";
     cin >> choice;
     cout << "Enter bet: ";
     cin >> bet;
@@ -163,21 +162,22 @@ int main() {
     double gpa = 4.0;
 
     while (true) {
-        cout << "\n=== Casino ===\n";
+        cout << "\n=== GPA 6 MAIN MENU ===\n";
         cout << "Balance: " << gpa << "\n";
-        cout << "1. Blackjack\n2. Grade Machine\n3. Roulette\n4. Exit\nChoice: ";
+        cout << "1. Blackjack\n2. Grade Machine\n3. Grade Wheel\n4. Exit\nChoice: ";
 
         int choice;
         cin >> choice;
 
         if (choice == 1) playBlackjack(gpa);
         else if (choice == 2) playGradeMachine(gpa);
-        else if (choice == 3) playRoulette(gpa);
+        else if (choice == 3) playGradeWheel(gpa);
         else if (choice == 4) {
-            cout << "Goodbye!\n";
+            cout << "dropout\n";
             break;
         } else {
-            cout << "Invalid choice.\n";
+            cout << "Pick a real option (-1 gpa).\n";
+            gpa -= 1;
         }
 
         if (gpa <= 0) {
