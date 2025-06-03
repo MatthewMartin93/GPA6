@@ -5,12 +5,11 @@
 #include <vector>
 using namespace std;
 
-void playBlackjack(int& balance) {
-    int bet;
-    cout << "\n[Blackjack] Enter bet: 
-      $";
+void playBlackjack(double& gpa) {
+    double bet;
+    cout << "\n[Blackjack] Enter bet: ";
     cin >> bet;
-    if (bet > balance || bet <= 0) {
+    if (bet > gpa || bet <= 0) {
         cout << "Invalid bet.\n";
         return;
     }
@@ -50,7 +49,7 @@ void playBlackjack(int& balance) {
 
     if (playerTotal > 21) {
         cout << "You busted!\n";
-        balance -= bet;
+        gpa -= bet;
         return;
     }
 
@@ -68,20 +67,29 @@ void playBlackjack(int& balance) {
     // Outcome
     if (dealerTotal > 21 || playerTotal > dealerTotal) {
         cout << "You win!\n";
-        balance += bet;
+        gpa += bet;
     } else if (dealerTotal == playerTotal) {
         cout << "Push.\n";
     } else {
         cout << "Dealer wins. You lose.\n";
-        balance -= bet;
+        gpa -= bet;
     }
 }
 
-void playSlots(int& balance) {
-    int bet;
-    cout << "\n[Slots] Enter bet: $";
+void playGradeMachine(double& gpa) {
+    double bet;
+    cout << "Welcome to the grade machine!" << endl;
+    cout << "[ A+ | A+ | A+ ] = 50x" << endl;
+    cout << "[ A  | A  | A  ] = 25x" << endl;
+    cout << "[ A- | A- | A- ] = 20x" << endl;
+    cout << "[ B  | B  | B  ] = 15x" << endl;
+    cout << "[ C  | C  | C  ] = 10x" << endl;
+    cout << "3 of a kind = 5x" << endl;
+    cout << "Pair = 2x" << endl;
+
+    cout << "\n[Grade Machine] Enter bet: ";
     cin >> bet;
-    if (bet > balance || bet <= 0) {
+    if (bet > gpa || bet <= 0) {
         cout << "Invalid bet.\n";
         return;
     }
@@ -99,23 +107,38 @@ void playSlots(int& balance) {
 //C C C 10
 //3OAK 5
 //PAIR 2
-    if (a == b && b == c) {
-        cout << "Jackpot!\n";
-        balance += bet * 10;
+    if (a == 0 && b == 0 && c == 0) {
+        cout << "JACKPOT! (50x)\n";
+        gpa += bet * 50;
+    } else if (a == 1 && b == 1 && c == 1) {
+        cout << "BIG WIN! (25x)\n";
+        gpa += bet * 25;
+    } else if (a == 2 && b == 2 && c == 2) {
+        cout << "WIN! (20x)\n";
+        gpa += bet * 20;
+    } else if (a == 3 && b == 3 && c == 3) {
+        cout << "win! (15x)\n";
+        gpa += bet * 15;
+    } else if (a == 4 && b == 4 && c == 4) {
+        cout << "win (10x)\n";
+        gpa += bet * 10;
+    } else if (a == b && b == c) {
+        cout << "3 of a kind (5x)\n";
+        gpa += bet * 5;
     } else if (a == b || b == c || a == c) {
-        cout << "Small win.\n";
-        balance += bet;
+        cout << "Pair (2x)\n";
+        gpa += bet;
     } else {
-        cout << "No match. You lose.\n";
-        balance -= bet;
+        cout << "No matches, you suck.\n";
+        gpa -= bet;
     }
 }
 
-void playRoulette(int& balance) {
-    int choice, bet;
+void playRoulette(double& balance) {
+    double choice, bet;
     cout << "\n[Roulette] Bet on (0=Red, 1=Black): ";
     cin >> choice;
-    cout << "Enter bet: $";
+    cout << "Enter bet: ";
     cin >> bet;
 
     if (bet > balance || bet <= 0 || (choice != 0 && choice != 1)) {
@@ -137,19 +160,19 @@ void playRoulette(int& balance) {
 
 int main() {
     srand(static_cast<unsigned int>(time(0)));
-    int balance = 1000;
+    double gpa = 4.0;
 
     while (true) {
         cout << "\n=== Casino ===\n";
-        cout << "Balance: $" << balance << "\n";
-        cout << "1. Blackjack\n2. Slots\n3. Roulette\n4. Exit\nChoice: ";
+        cout << "Balance: " << gpa << "\n";
+        cout << "1. Blackjack\n2. Grade Machine\n3. Roulette\n4. Exit\nChoice: ";
 
         int choice;
         cin >> choice;
 
-        if (choice == 1) playBlackjack(balance);
-        else if (choice == 2) playSlots(balance);
-        else if (choice == 3) playRoulette(balance);
+        if (choice == 1) playBlackjack(gpa);
+        else if (choice == 2) playGradeMachine(gpa);
+        else if (choice == 3) playRoulette(gpa);
         else if (choice == 4) {
             cout << "Goodbye!\n";
             break;
@@ -157,8 +180,8 @@ int main() {
             cout << "Invalid choice.\n";
         }
 
-        if (balance <= 0) {
-            cout << "You're out of money. Game over.\n";
+        if (gpa <= 0) {
+            cout << "You're out of GPA. You get kicked out for being too dumb.\n";
             break;
         }
     }
