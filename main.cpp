@@ -2,7 +2,11 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include <algorithm>
 using namespace std;
+
+vector<int> rouletteRed = {1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36};
+vector<int> rouletteBlack = {2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35};
 
 void playBlackjack(double& gpa) {
     double bet;
@@ -99,13 +103,7 @@ void playGradeMachine(double& gpa) {
     int c = rand() % 7;
 
     cout << "[ " << symbols[a] << " | " << symbols[b] << " | " << symbols[c] << " ]\n";
-//A+A+A+ 50
-//A A A 25
-//A-A-A- 20
-//B B B 15
-//C C C 10
-//3OAK 5
-//PAIR 2
+
     if (a == 0 && b == 0 && c == 0) {
         cout << "JACKPOT! (50x)\n";
         gpa += bet * 50;
@@ -133,27 +131,53 @@ void playGradeMachine(double& gpa) {
     }
 }
 
-void playGradeWheel(double& balance) {
-    double choice, bet;
-    cout << "\n[Grade Wheel] Bet on (0=Red, 1=Black): ";
-    cin >> choice;
-    cout << "Enter bet: ";
+void playGradeWheel(double& gpa) {
+    int choiceColor;
+    double bet;
+
+    cout << "\n[Grade Wheel - School Roulette]\n";
+    cout << "Bet on a color:\n";
+    cout << "  0 = Red\n";
+    cout << "  1 = Black\n";
+    cout << "  2 = Green (0)\n";
+    cout << "Your choice: ";
+    cin >> choiceColor;
+
+    cout << "Enter your bet amount: ";
     cin >> bet;
 
-    if (bet > balance || bet <= 0 || (choice != 0 && choice != 1)) {
-        cout << "Invalid bet.\n";
+    if (bet <= 0 || bet > gpa || (choiceColor < 0 || choiceColor > 2)) {
+        cout << "Invalid choice or bet amount.\n";
         return;
     }
 
-    int spin = rand() % 2;
-    cout << "Wheel landed on: " << (spin == 0 ? "Red" : "Black") << "\n";
+    int spin = rand() % 37; // 0–36, with 0 being green
+    cout << "Wheel spins... landed on: " << spin;
 
-    if (spin == choice) {
+    if (spin == 0) {
+        cout << " (Green)\n";
+        if (choiceColor == 2) {
+            cout << "Jackpot! You win 14x your bet!\n";
+            gpa += bet * 14;
+        } else {
+            cout << "You lose!\n";
+            gpa -= bet;
+        }
+        return;
+    }
+
+    bool isRed = (find(rouletteRed.begin(), rouletteRed.end(), spin) != rouletteRed.end());
+    bool playerBetRed = (choiceColor == 0);
+    bool playerBetBlack = (choiceColor == 1);
+
+    cout << (isRed ? " (Red)\n" : " (Black)\n");
+
+    if ((isRed && playerBetRed) || (!isRed && playerBetBlack)) {
         cout << "You win!\n";
-        balance += bet;
+        gpa += bet;
     } else {
         cout << "You lose!\n";
-        balance -= bet;
+        gpa -= bet;
     }
 }
 
